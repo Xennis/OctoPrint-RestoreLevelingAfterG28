@@ -4,7 +4,7 @@
 ### Do not forget to adjust the following variables to your own plugin.
 
 # The plugin's identifier, has to be unique
-plugin_identifier = "restore_leveling_after_g28"
+plugin_identifier = "restorelevelingafterg28"
 
 # The plugin's python package, should be "octoprint_<plugin identifier>", has to be unique
 plugin_package = "octoprint_restore_leveling_after_g28"
