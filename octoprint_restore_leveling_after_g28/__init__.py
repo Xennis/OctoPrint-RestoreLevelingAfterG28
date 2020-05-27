@@ -4,8 +4,10 @@ from __future__ import absolute_import
 import logging
 
 import octoprint.plugin
+from octoprint.plugin import OctoPrintPlugin
 
-class RestoreLevelingAfterG28Plugin():
+
+class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 
 	def rewrite_g28(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 		if not gcode or gcode != "G28":
