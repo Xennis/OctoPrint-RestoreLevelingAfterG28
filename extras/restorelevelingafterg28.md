@@ -26,13 +26,13 @@ compatibility:
   - windows
   - macos
   - freebsd
-  python: ">=2.7,<3"
+  python: ">=2.7,<4"
 
 ---
 
 Automatically keep leveling on after G28 (Auto Home).
 
-Marlin [G28](https://marlinfw.org/docs/gcode/M420.html) disabled bed leveling. Follow with [M420 S](https://marlinfw.org/docs/gcode/M420.html)
+Marlin [G28](https://marlinfw.org/docs/gcode/M420.html) disables bed leveling. Follow with [M420 S](https://marlinfw.org/docs/gcode/M420.html)
 turns leveling on. That behaviour can be enabled in Marlin via `RESTORE_LEVELING_AFTER_G28` or this plugin.
 
 **Note**: The plugin do not _restore_ the state. It always enabled the bed leveling after a `G28` regardless if it
