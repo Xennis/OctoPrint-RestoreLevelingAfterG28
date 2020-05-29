@@ -9,13 +9,42 @@ from octoprint.plugin import OctoPrintPlugin
 
 class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 
-	def rewrite_g28(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+	ATCMD_RESTORE_LEVELING = "restore_leveling"
+
+	def __init__(self):
+		super(OctoPrintPlugin, self).__init__()
+		self.bed_leveling_enabled = False
+
+	def hook_atcommand_sending(self, comm_instance, phase, command, parameters, tags=None, *args, **kwargs):
+		if command != self.ATCMD_RESTORE_LEVELING:
+			return
+		if not self.bed_leveling_enabled:
+			self._logger.info("Keep leveling disabled".format(**locals()))
+			return
+
+		cmd = "M420 S1"
+		self._logger.info("Re-enable leveling: {cmd}".format(**locals()))
+		self._printer.commands(cmd, tags=tags)
+
+	def hook_gcode_queuing(self, comm_instance, phase, cmd, cmd_type, gcode, subcode=None, tags=None, *args, **kwargs):
 		if not gcode or gcode != "G28":
 			return
 
-		cmd = [(cmd,), ("M420 S1",)]
+		cmd = [
+			("M420 V",),  # Current status
+			(cmd, cmd_type, tags),
+			("@{}".format(self.ATCMD_RESTORE_LEVELING),)  # Restore status
+		]
 		self._logger.info("Expand G28: {cmd}".format(**locals()))
 		return cmd
+
+	def hook_gcode_received(self, comm_instance, line, *args, **kwargs):
+		if not line or not line.startswith("echo:Bed Leveling"):
+			return line
+
+		self.bed_leveling_enabled = bool("Bed Leveling On" in line)
+		self._logger.info("Leveling is enabled: {self.bed_leveling_enabled}".format(**locals()))
+		return line
 
 	##~~ Softwareupdate hook
 
@@ -48,6 +77,8 @@ def __plugin_load__():
 
 	global __plugin_hooks__
 	__plugin_hooks__ = {
-		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.rewrite_g28,
+		"octoprint.comm.protocol.atcommand.sending": __plugin_implementation__.hook_atcommand_sending,
+		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.hook_gcode_queuing,
+		"octoprint.comm.protocol.gcode.received": __plugin_implementation__.hook_gcode_received,
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
 	}
