@@ -1,5 +1,7 @@
 # Restore Leveling After G28
 
+[![Build Status](https://travis-ci.org/Xennis/OctoPrint-RestoreLevelingAfterG28.svg?branch=master)](https://travis-ci.org/Xennis/OctoPrint-RestoreLevelingAfterG28)
+
 **TODO:** Describe what your plugin does.
 
 ## Setup
