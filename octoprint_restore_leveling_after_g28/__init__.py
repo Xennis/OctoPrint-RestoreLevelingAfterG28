@@ -16,7 +16,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 		if command != self.ATCMD_RESTORE_LEVELING:
 			return
 		if not self.leveling_enabled:
-			self._logger.info("Keep leveling disabled".format(**locals()))
+			self._logger.debug("Keep leveling disabled".format(**locals()))
 			return
 
 		cmd = "M420 S1"
