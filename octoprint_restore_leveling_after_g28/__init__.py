@@ -10,12 +10,12 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 
 	def __init__(self):
 		super(OctoPrintPlugin, self).__init__()
-		self.bed_leveling_enabled = False
+		self.leveling_enabled = False
 
 	def hook_atcommand_sending(self, comm_instance, phase, command, parameters, tags=None, *args, **kwargs):
 		if command != self.ATCMD_RESTORE_LEVELING:
 			return
-		if not self.bed_leveling_enabled:
+		if not self.leveling_enabled:
 			self._logger.info("Keep leveling disabled".format(**locals()))
 			return
 
@@ -39,8 +39,8 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 		if not line or not line.startswith("echo:Bed Leveling"):
 			return line
 
-		self.bed_leveling_enabled = bool("Bed Leveling On" in line)
-		self._logger.info("Leveling is enabled: {self.bed_leveling_enabled}".format(**locals()))
+		self.leveling_enabled = bool("Bed Leveling On" in line)
+		self._logger.info("Leveling is enabled: {self.leveling_enabled}".format(**locals()))
 		return line
 
 	##~~ Softwareupdate hook
