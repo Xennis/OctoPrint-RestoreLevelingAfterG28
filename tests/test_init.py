@@ -52,6 +52,62 @@ class TestHookAtcommandSending(unittest.TestCase):
 		p._printer.commands.assert_called_once_with("M420 S1", tags=None)
 
 
+class TestHookQueuing(unittest.TestCase):
+
+	def test_none(self):
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		actual = p.hook_gcode_queuing(None, None, cmd=None, cmd_type=None, gcode=None)
+		self.assertIsNone(actual)
+
+	def test_some_cmd(self):
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		actual = p.hook_gcode_queuing(None, None, cmd="G30", cmd_type=None, gcode="G30")
+		self.assertIsNone(actual)
+
+	def test_expand(self):
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		actual = p.hook_gcode_queuing(None, None, cmd="G28 X Z", cmd_type="type1", gcode="G28", tags=["tag1", "tag2"])
+		expected = [
+			("M420 V",),
+			("G28 X Z", "type1", ["tag1", "tag2"]),
+			("@restore_leveling",)
+		]
+		self.assertEqual(expected, actual, msg="cmd")
+		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+
+	def test_expand_no_type_and_no_tags(self):
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		actual = p.hook_gcode_queuing(None, None, cmd="G28 X Z", cmd_type=None, gcode="G28", tags=None)
+		expected = [
+			("M420 V",),
+			("G28 X Z", None, None),
+			("@restore_leveling",)
+		]
+		self.assertEqual(expected, actual, msg="cmd")
+		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+
+	def test_expand_no_parameters(self):
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		actual = p.hook_gcode_queuing(None, None, cmd="G28", cmd_type=None, gcode="G28", tags=None)
+		expected = [
+			("M420 V",),
+			("G28", None, None),
+			("@restore_leveling",)
+		]
+		self.assertEqual(expected, actual, msg="cmd")
+		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+
+
 class TestHookGcodeReceived(unittest.TestCase):
 
 	def test_none(self):
