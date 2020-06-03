@@ -50,7 +50,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 		# Plugin here. See https://docs.octoprint.org/en/master/bundledplugins/softwareupdate.html
 		# for details.
 		return dict(
-			restore_leveling_after_g28=dict(
+			restorelevelingafterg28=dict(
 				displayName="Restore Leveling After G28",
 				displayVersion=self._plugin_version,
 

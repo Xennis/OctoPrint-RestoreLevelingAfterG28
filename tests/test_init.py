@@ -2,7 +2,7 @@ import unittest
 
 from mock import MagicMock
 
-from octoprint_restore_leveling_after_g28 import RestoreLevelingAfterG28Plugin
+from octoprint_restorelevelingafterg28 import RestoreLevelingAfterG28Plugin
 
 
 class TestHookAtcommandSending(unittest.TestCase):

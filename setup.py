@@ -7,7 +7,7 @@
 plugin_identifier = "restorelevelingafterg28"
 
 # The plugin's python package, should be "octoprint_<plugin identifier>", has to be unique
-plugin_package = "octoprint_restore_leveling_after_g28"
+plugin_package = "octoprint_restorelevelingafterg28"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
