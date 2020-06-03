@@ -8,5 +8,6 @@ install:
   - pip install OctoPrint
 script:
   - python -m unittest discover
+  - pip install -e .
 branches:
   only: [master]
