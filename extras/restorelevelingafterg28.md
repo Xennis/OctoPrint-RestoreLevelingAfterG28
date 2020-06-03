@@ -3,7 +3,7 @@ layout: plugin
 
 id: restorelevelingafterg28
 title: Restore Leveling After G28
-description: Automatically keep leveling on after G28 (Auto Home).
+description: Automatically keep bed leveling on after G28 (Auto Home).
 author: Xennis
 license: MIT
 
@@ -30,10 +30,24 @@ compatibility:
 
 ---
 
-Automatically keep leveling on after G28 (Auto Home).
+Automatically keep bed leveling on after `G28` (Auto Home).
 
-Marlin [G28](https://marlinfw.org/docs/gcode/M420.html) disables bed leveling. Follow with [M420 S](https://marlinfw.org/docs/gcode/M420.html)
-turns leveling on. That behaviour can be enabled in Marlin via `RESTORE_LEVELING_AFTER_G28` or this plugin.
+Marlin code `G28` disables bed leveling. The plugin restore the prior state:
 
-**Note**: The plugin do not _restore_ the state. It always enabled the bed leveling after a `G28` regardless if it
-was enabled or disabled before. If there is the demand for a actual restore please create a pull request or issue.
+* Before a `G28` command a `M420 V` is send to check if leveling is enabled or not.
+* If leveling was enabled: After the `G28` command a `M420 S1` is send to enable leveling.
+
+That same behaviour can be enabled in the Marlin firmware via `RESTORE_LEVELING_AFTER_G28`.
+
+## Setup
+
+Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
+or manually using this URL:
+
+```
+https://github.com/Xennis/OctoPrint-RestoreLevelingAfterG28/archive/master.zip
+```
+
+## Configuration
+
+The plugin has no configuration and does not adjust the UI.
