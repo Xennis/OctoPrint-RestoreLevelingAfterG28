@@ -20,7 +20,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 			return
 
 		cmd = "M420 S1"
-		self._logger.info("Re-enable leveling: {cmd}".format(**locals()))
+		self._logger.debug("Re-enable leveling: {cmd}".format(**locals()))
 		self._printer.commands(cmd, tags=tags)
 
 	def hook_gcode_queuing(self, comm_instance, phase, cmd, cmd_type, gcode, subcode=None, tags=None, *args, **kwargs):
@@ -32,7 +32,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 			(cmd, cmd_type, tags),
 			("@{}".format(self.ATCMD_RESTORE_LEVELING),)  # Restore status
 		]
-		self._logger.info("Expand G28: {cmd}".format(**locals()))
+		self._logger.debug("Expand G28: {cmd}".format(**locals()))
 		return cmd
 
 	def hook_gcode_received(self, comm_instance, line, *args, **kwargs):
@@ -40,7 +40,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 			return line
 
 		self.leveling_enabled = bool("Bed Leveling On" in line)
-		self._logger.info("Leveling is enabled: {self.leveling_enabled}".format(**locals()))
+		self._logger.debug("Leveling is enabled: {self.leveling_enabled}".format(**locals()))
 		return line
 
 	##~~ Softwareupdate hook

@@ -37,7 +37,7 @@ class TestHookAtcommandSending(unittest.TestCase):
 		p._printer = MagicMock()
 		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=["tag1", "tag2"])
 		self.assertIsNone(actual)
-		p._logger.info.assert_called_once_with("Re-enable leveling: M420 S1")
+		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1")
 		p._printer.commands.assert_called_once_with("M420 S1", tags=["tag1", "tag2"])
 
 	def test_cmd_leveling_on_tags_none(self):
@@ -48,7 +48,7 @@ class TestHookAtcommandSending(unittest.TestCase):
 		p._printer = MagicMock()
 		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=None)
 		self.assertIsNone(actual)
-		p._logger.info.assert_called_once_with("Re-enable leveling: M420 S1")
+		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1")
 		p._printer.commands.assert_called_once_with("M420 S1", tags=None)
 
 
@@ -79,7 +79,7 @@ class TestHookQueuing(unittest.TestCase):
 			("@restore_leveling",)
 		]
 		self.assertEqual(expected, actual, msg="cmd")
-		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+		p._logger.debug.assert_called_once_with("Expand G28: {}".format(expected))
 
 	def test_expand_no_type_and_no_tags(self):
 		p = RestoreLevelingAfterG28Plugin()
@@ -92,7 +92,7 @@ class TestHookQueuing(unittest.TestCase):
 			("@restore_leveling",)
 		]
 		self.assertEqual(expected, actual, msg="cmd")
-		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+		p._logger.debug.assert_called_once_with("Expand G28: {}".format(expected))
 
 	def test_expand_no_parameters(self):
 		p = RestoreLevelingAfterG28Plugin()
@@ -105,7 +105,7 @@ class TestHookQueuing(unittest.TestCase):
 			("@restore_leveling",)
 		]
 		self.assertEqual(expected, actual, msg="cmd")
-		p._logger.info.assert_called_once_with("Expand G28: {}".format(expected))
+		p._logger.debug.assert_called_once_with("Expand G28: {}".format(expected))
 
 
 class TestHookGcodeReceived(unittest.TestCase):
@@ -131,7 +131,7 @@ class TestHookGcodeReceived(unittest.TestCase):
 		actual = p.hook_gcode_received(None, line, None)
 		self.assertEqual(line, actual, msg="line")
 		self.assertTrue(p.leveling_enabled, msg="leveling enabled")
-		p._logger.info.assert_called_once_with("Leveling is enabled: True")
+		p._logger.debug.assert_called_once_with("Leveling is enabled: True")
 
 	def test_leveling_off(self):
 		line = "echo:Bed Leveling Off"
@@ -140,4 +140,4 @@ class TestHookGcodeReceived(unittest.TestCase):
 		actual = p.hook_gcode_received(None, line, None)
 		self.assertEqual(line, actual, msg="line")
 		self.assertFalse(p.leveling_enabled, msg="leveling enabled")
-		p._logger.info.assert_called_once_with("Leveling is enabled: False")
+		p._logger.debug.assert_called_once_with("Leveling is enabled: False")
