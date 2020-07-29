@@ -135,7 +135,7 @@ class TestHookGcodeReceived(unittest.TestCase):
 			p._logger.debug.assert_called_once_with("Leveling is enabled: True")
 
 	def test_leveling_off(self):
-		lines = ["echo:Bed Leveling Off", "echo:Bed Leveling Off"]
+		lines = ["echo:Bed Leveling Off", "echo:Bed Leveling OFF"]
 		p = RestoreLevelingAfterG28Plugin()
 		for line in lines:
 			p._logger = MagicMock()
