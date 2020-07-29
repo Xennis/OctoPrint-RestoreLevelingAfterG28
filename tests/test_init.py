@@ -125,19 +125,21 @@ class TestHookGcodeReceived(unittest.TestCase):
 		self.assertFalse(p.leveling_enabled, msg="leveling enabled")
 
 	def test_leveling_on(self):
-		line = "echo:Bed Leveling On"
+		lines = ["echo:Bed Leveling On", "echo:Bed Leveling ON"]
 		p = RestoreLevelingAfterG28Plugin()
-		p._logger = MagicMock()
-		actual = p.hook_gcode_received(None, line, None)
-		self.assertEqual(line, actual, msg="line")
-		self.assertTrue(p.leveling_enabled, msg="leveling enabled")
-		p._logger.debug.assert_called_once_with("Leveling is enabled: True")
+		for line in lines:
+			p._logger = MagicMock()
+			actual = p.hook_gcode_received(None, line, None)
+			self.assertEqual(line, actual, msg="line")
+			self.assertTrue(p.leveling_enabled, msg="leveling enabled")
+			p._logger.debug.assert_called_once_with("Leveling is enabled: True")
 
 	def test_leveling_off(self):
-		line = "echo:Bed Leveling Off"
+		lines = ["echo:Bed Leveling Off", "echo:Bed Leveling Off"]
 		p = RestoreLevelingAfterG28Plugin()
-		p._logger = MagicMock()
-		actual = p.hook_gcode_received(None, line, None)
-		self.assertEqual(line, actual, msg="line")
-		self.assertFalse(p.leveling_enabled, msg="leveling enabled")
-		p._logger.debug.assert_called_once_with("Leveling is enabled: False")
+		for line in lines:
+			p._logger = MagicMock()
+			actual = p.hook_gcode_received(None, line, None)
+			self.assertEqual(line, actual, msg="line")
+			self.assertFalse(p.leveling_enabled, msg="leveling enabled")
+			p._logger.debug.assert_called_once_with("Leveling is enabled: False")

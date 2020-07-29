@@ -39,7 +39,7 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 		if not line or not line.startswith("echo:Bed Leveling"):
 			return line
 
-		self.leveling_enabled = bool("Bed Leveling On" in line)
+		self.leveling_enabled = bool("bed leveling on" in line.lower())
 		self._logger.debug("Leveling is enabled: {self.leveling_enabled}".format(**locals()))
 		return line
 
