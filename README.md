@@ -1,6 +1,6 @@
 # OctoPrint Plugin – Restore Leveling After G28
 
-![Python](https://github.com/Xennis/OctoPrint-RestoreLevelingAfterG28/workflows/Python/badge.svg?branch=master&event=push)
+[![Python](https://github.com/Xennis/OctoPrint-RestoreLevelingAfterG28/workflows/Python/badge.svg?branch=master&event=push)](https://github.com/Xennis/OctoPrint-RestoreLevelingAfterG28/actions?query=workflow%3APython+event%3Apush+branch%3Amaster)
 
 Automatically keeps bed leveling on after `G28` (Auto Home).
 
