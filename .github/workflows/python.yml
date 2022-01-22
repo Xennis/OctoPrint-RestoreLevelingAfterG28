@@ -5,7 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.6, 3.7, 3.8, 3.9]
+        python-version:
+        - '2.7'
+        - '3.6'
+        - '3.7'
+        - '3.8'
+        - '3.9'
+        - '3.10'
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -14,5 +20,7 @@ jobs:
     - run: pip install OctoPrint
     - name: Install test dependencies
       run: pip install mock
-    - run: python -m unittest discover
-    - run: pip install -e .
+    - name: Run tests
+      run: python -m unittest discover
+    - name: Install module
+      run: pip install -e .
