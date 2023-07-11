@@ -1,15 +1,15 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from octoprint.plugin import OctoPrintPlugin
+from octoprint.plugin import SettingsPlugin
 
 
-class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
+class RestoreLevelingAfterG28Plugin(SettingsPlugin):
 
 	ATCMD_RESTORE_LEVELING = "restore_leveling"
 
 	def __init__(self):
-		super(OctoPrintPlugin, self).__init__()
+		super(SettingsPlugin, self).__init__()
 		self.leveling_enabled = False
 
 	def hook_atcommand_sending(self, comm_instance, phase, command, parameters, tags=None, *args, **kwargs):
@@ -20,6 +20,9 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 			return
 
 		cmd = "M420 S1"
+		fade = self._settings.getFloat(["zFadeHeight"])
+		if fade:
+			cmd += " Z{fade}".format(fade=fade)
 		self._logger.debug("Re-enable leveling: {cmd}".format(**locals()))
 		self._printer.commands(cmd, tags=tags)
 
@@ -42,6 +45,10 @@ class RestoreLevelingAfterG28Plugin(OctoPrintPlugin):
 		self.leveling_enabled = bool("bed leveling on" in line.lower())
 		self._logger.debug("Leveling is enabled: {self.leveling_enabled}".format(**locals()))
 		return line
+
+	##~~ Settings hook
+	def get_settings_defaults(self):
+		return dict(zFadeHeight=None)
 
 	##~~ Softwareupdate hook
 

@@ -1,6 +1,7 @@
 import unittest
 
-from mock import MagicMock
+from mock import Mock, MagicMock
+from octoprint.settings import Settings
 
 from octoprint_restorelevelingafterg28 import RestoreLevelingAfterG28Plugin
 
@@ -35,10 +36,13 @@ class TestHookAtcommandSending(unittest.TestCase):
 		p.leveling_enabled = True
 		p._logger = MagicMock()
 		p._printer = MagicMock()
+		p._settings = MagicMock()
+		p._settings.getFloat = Mock(return_value=None)
 		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=["tag1", "tag2"])
 		self.assertIsNone(actual)
 		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1")
 		p._printer.commands.assert_called_once_with("M420 S1", tags=["tag1", "tag2"])
+		p._settings.getFloat.assert_called_once_with(["zFadeHeight"])
 
 	def test_cmd_leveling_on_tags_none(self):
 		cmd = "restore_leveling"
@@ -46,10 +50,41 @@ class TestHookAtcommandSending(unittest.TestCase):
 		p.leveling_enabled = True
 		p._logger = MagicMock()
 		p._printer = MagicMock()
+		p._settings = MagicMock()
+		p._settings.getFloat = Mock(return_value=None)
 		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=None)
 		self.assertIsNone(actual)
 		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1")
 		p._printer.commands.assert_called_once_with("M420 S1", tags=None)
+		p._settings.getFloat.assert_called_once_with(["zFadeHeight"])
+
+	def test_cmd_leveling_on_with_fade(self):
+		cmd = "restore_leveling"
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		p._printer = MagicMock()
+		p._settings = MagicMock()
+		p._settings.getFloat = Mock(return_value=2.0)
+		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=None)
+		self.assertIsNone(actual)
+		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1 Z2.0")
+		p._printer.commands.assert_called_once_with("M420 S1 Z2.0", tags=None)
+		p._settings.getFloat.assert_called_once_with(["zFadeHeight"])
+
+	def test_cmd_leveling_on_with_fade_zero(self):
+		cmd = "restore_leveling"
+		p = RestoreLevelingAfterG28Plugin()
+		p.leveling_enabled = True
+		p._logger = MagicMock()
+		p._printer = MagicMock()
+		p._settings = MagicMock()
+		p._settings.getFloat = Mock(return_value=0)
+		actual = p.hook_atcommand_sending(None, None, cmd, None, tags=None)
+		self.assertIsNone(actual)
+		p._logger.debug.assert_called_once_with("Re-enable leveling: M420 S1")
+		p._printer.commands.assert_called_once_with("M420 S1", tags=None)
+		p._settings.getFloat.assert_called_once_with(["zFadeHeight"])
 
 
 class TestHookQueuing(unittest.TestCase):

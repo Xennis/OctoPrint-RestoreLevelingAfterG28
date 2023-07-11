@@ -22,4 +22,17 @@ https://github.com/Xennis/OctoPrint-RestoreLevelingAfterG28/archive/master.zip
 
 ## Configuration
 
-The plugin has no configuration and does not adjust the UI.
+The plugin does not adjust the UI. It has the following settings:
+
+* `zFadeHeight`: *If* set the Z fade high parameter in the [M420](https://marlinfw.org/docs/gcode/M420.html) command is
+  set. The value should be a number (integer, float).
+
+### Example
+
+For details checkout the [official documentation](https://docs.octoprint.org/en/master/configuration/config_yaml.html#plugin-settings).
+
+```yaml
+plugins:
+  restorelevelingafterg28:
+    zFadeHeight: 2
+```
