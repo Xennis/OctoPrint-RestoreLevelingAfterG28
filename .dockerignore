@@ -1,0 +1,8 @@
+.git/
+
+# Python
+*.egg*
+venv/
+
+# Local files
+.idea/
