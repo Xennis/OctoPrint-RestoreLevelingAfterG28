@@ -26,7 +26,7 @@ compatibility:
   - windows
   - macos
   - freebsd
-  python: ">=2.7,<4"
+  python: ">=3.7,<4"
 
 ---
 
