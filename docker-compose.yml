@@ -1,0 +1,9 @@
+version: '2.4'
+
+services:
+  octoprint:
+    build:
+      context: .
+      dockerfile: Dockerfile.integration
+    ports:
+      - 80:80

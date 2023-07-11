@@ -1,0 +1,4 @@
+FROM octoprint/octoprint:latest
+ENV PIP_USER false
+ADD . /OctoPrint-RestoreLevelingAfterG28
+RUN pip install --editable /OctoPrint-RestoreLevelingAfterG28
